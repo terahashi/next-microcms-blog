@@ -1,5 +1,124 @@
 @import 'tailwindcss';
 
+/* ⬇︎自分で追加 */
+/* 変数定義 */
+:root {
+  /* 見出し */
+  --text-heading-h1: 2rem; /* 32px */
+  --text-heading-h2: 1.5rem; /* 24px */
+  --text-heading-h3: 1.25rem; /* 20px */
+  --text-heading-h4: 1.125rem; /* 18px */
+  --text-heading-h5: 1rem; /* 16px */
+  --text-heading-h6: 0.875rem; /* 14px */
+
+  /* 本文 */
+  --text-base: 1rem;
+
+  /* span */
+  --text-span: 1rem;
+
+  /* 補足・キャプション */
+  --text-small: 0.875rem;
+
+  /* ボタン */
+  --text-button: 0.875rem;
+
+  /* color */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray: #b0b0b0;
+
+  /* header / width / padding / margin / height */
+  --header-height: 70.2px;
+
+  --layout-max-width: 1280px;
+  --layout-padding: 16px;
+
+  --res-sec-padding-top: 50px;
+  --sec-padding-top: 100px;
+
+  --res-sec-padding-bottom: 50px;
+  --sec-padding-bottom: 100px;
+
+  --res-pages-padding-top: 50px;
+  --pages-padding-top: 100px;
+}
+
+/* @layer base{}で TailWindCSSを優先させるように設定 */
+/* ・つまり下記のcssは、TailWindCSSと競合せず「TailWindCSSが最優先されるようになる。」 */
+/* ・@layer base{}の外に書いたCSSは「Tailwind utilitiesより後に出力されるようになり、TailWindCSSが最優先されない。」 */
+@layer base {
+  body {
+    font-family: var(--font-open-sans), sans-serif;
+    word-break: break-all; /* 日本語用の途中で折り返してよい*/
+    overflow-wrap: break-word; /* URLなどの長い単語が行からはみ出す場合、途中で折り返してよい */
+    font-size: 1rem;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+
+  /* ⬇︎layout.jsで定義。日本語タイトルだけにNotoSansJPを使用する。端末環境ではsans-serifが使用。 */
+  .title__ja {
+    font-family: var(--font-noto-sans-jp), sans-serif;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-top: 0;
+    margin-bottom: 0.6em;
+  }
+
+  h1 {
+    font-size: var(--text-heading-h1);
+    line-height: 1.2;
+  }
+  h2 {
+    font-size: var(--text-heading-h2);
+    line-height: 1.25;
+  }
+  h3 {
+    font-size: var(--text-heading-h3);
+    line-height: 1.3;
+  }
+  h4 {
+    font-size: var(--text-heading-h4);
+    line-height: 1.35;
+  }
+  h5 {
+    font-size: var(--text-heading-h5);
+    line-height: 1.4;
+  }
+  h6 {
+    font-size: var(--text-heading-h6);
+    line-height: 1.45;
+  }
+
+  p {
+    font-size: var(--text-base);
+    line-height: 1.4;
+  }
+
+  span {
+    font-size: var(--text-span);
+    line-height: 1.4;
+  }
+
+  small {
+    font-size: var(--text-small);
+    line-height: 1.4;
+  }
+
+  button {
+    font-size: var(--text-button);
+    line-height: 1.4;
+  }
+}
+
+/*
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -20,7 +139,7 @@
 }
 
 body {
-  /* background: var(--background); */
+  background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
+} */

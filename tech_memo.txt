@@ -1,9 +1,9 @@
 
 ------------------------------------------------
 ------------------------------------------------
-🔶✅要件整理「仕様書」
+🔶要件整理「仕様書」
 
-■■Step1：要件整理「仕様書」
+■Step1：要件整理「仕様書」
 どんな機能が必要❓
 ・機能一覧
 ・使用技術
@@ -43,8 +43,6 @@ TypeScript
 TailwindCSS
 microCMS
 Vercel
-
-
 
 
 
@@ -92,25 +90,25 @@ ISR ➡︎ 静的ページを「一定時間毎に再生成、自動更新する
 🔶手順
 
 ✅完了1: Next.jsをインストール
+
 ✅完了2: microCMSを設定 & API作成
 microCMS公式へ。
 
 ✅完了3: APIキーをenvファイルで保護
 「.env.localファイル」を作成する。
 
-
 ✅完了4: vscodeで「npm install microcms-js-sdk」をインストールする。
 ・「microcms-js-sdk」とは？
 microCMSを使うためのライブラリです。
 ・コマンド
 npm install microcms-js-sdk
-・libsフォルダ -> 『client.js』を作成してSDKの初期化を行います。
+・libsフォルダ -> 『microcms.tsファイル』を作成してSDKの初期化を行います。
 
 
 5: ブログの一覧を表示する。
 ⭕️まずは「①javaScriptで作成。②その後TypeScriptに書き換えてみる。」
+・「app/page.js」にコードを書く。
 
-・app/page.js　にコードを書く。
 ・Nextブログの構造は以下の通りになっている
 microCMS
    ↓ 「microCMSから記事取得(API取得)」
@@ -118,19 +116,29 @@ client.js
    ↓
 app/page.js
    ↓(Next.jsがページ生成)
-ブラウザ表示
-　　　(ブラウザに記事一覧を表示する)
+ブラウザ表示(ブラウザに記事一覧を表示する)
 
 
+🍏microCMSのAPIの実際のレスポンス
+・contentsは「APIから取得した"contentsプロパティ(記事配列)"」
 
+⬇︎
 
-
-
-
-
-
-
-
+{
+  "contents": [
+    {
+      "id": "abc",
+      "title": "Next.jsブログの作り方"
+    },
+    {
+      "id": "xyz",
+      "title": "React入門"
+    }
+  ],
+  "totalCount": 2,
+  "offset": 0,
+  "limit": 10
+}
 
 
 
