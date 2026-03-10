@@ -102,15 +102,25 @@ microCMS公式へ。
 ✅完了4: vscodeで「npm install microcms-js-sdk」をインストールする。
 ・「microcms-js-sdk」とは？
 microCMSを使うためのライブラリです。
-
 ・コマンド
 npm install microcms-js-sdk
-
 ・libsフォルダ -> 『client.js』を作成してSDKの初期化を行います。
 
 
 5: ブログの一覧を表示する。
-app/page.js　にコードを書く。
+⭕️まずは「①javaScriptで作成。②その後TypeScriptに書き換えてみる。」
+
+・app/page.js　にコードを書く。
+・Nextブログの構造は以下の通りになっている
+microCMS
+   ↓ 「microCMSから記事取得(API取得)」
+client.js
+   ↓
+app/page.js
+   ↓(Next.jsがページ生成)
+ブラウザ表示
+　　　(ブラウザに記事一覧を表示する)
+
 
 
 
