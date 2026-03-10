@@ -89,7 +89,28 @@ ISR ➡︎ 静的ページを「一定時間毎に再生成、自動更新する
 
 ------------------------------------------------
 ------------------------------------------------
-🔶
+🔶手順
+
+✅完了1: Next.jsをインストール
+✅完了2: microCMSを設定 & API作成
+microCMS公式へ。
+
+✅完了3: APIキーをenvファイルで保護
+「.env.localファイル」を作成する。
+
+
+✅完了4: vscodeで「npm install microcms-js-sdk」をインストールする。
+・「microcms-js-sdk」とは？
+microCMSを使うためのライブラリです。
+
+・コマンド
+npm install microcms-js-sdk
+
+・libsフォルダ -> 『client.js』を作成してSDKの初期化を行います。
+
+
+5: ブログの一覧を表示する。
+app/page.js　にコードを書く。
 
 
 
