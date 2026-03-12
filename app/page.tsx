@@ -4,39 +4,14 @@
 //理由としては『TypeScriptのトレーニング。』
 
 import Image from 'next/image';
-import { client } from '../libs/microcms';
 import Link from 'next/link';
+import { getBlogPosts } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『記事データを取得するAPI関数』をまとめたファイル。
 
-////「TypeScript」ブログ記事の型エイリアスを定義する。
-type Blog = {
-  id: string; //記事ID
-  title: string; //記事タイトル
-  thumbnail: {
-    url: string; //サムネイル画像URL
-  };
-  publishedAt: string; //投稿日時
-};
+////ISR(定期で更新)
+//一定時間毎にページを再生成できる。(次のアクセス時にページを再生成)
+export const revalidate = 60; //60秒経過でページを再生成する
 
-////「記事一覧」を取得。
-//SSG(静的生成)を使ってデータを取得します。
-//なぜSSG(静的生成)を使う？➡︎『microCMS APIをビルド時に取得し、Next.jsでHTMLを生成するから』です。
-async function getBlogPosts(): Promise<Blog[]> {
-  //⬆︎:Promise<Blog[]>は「戻り値の型」を明示している。
-  //意味:「このgetBlogpots関数は Promiseが戻り値で、中身は<Blog[]>」になる。
-  //Blog[]の意味:「Blog型オブジェクトの配列」という意味。つまり記事データの配列が配列が返ってくる。
-  //async関数は必ずPromiseを返すので、Promise<型>をと書くべし。
-  const data = await client.get({
-    endpoint: 'blog', //'blog'はエンドポイント名。
-    queries: {
-      fields: 'id,title,thumbnail,publishedAt', //投稿した記事の「id、タイトル、サムネイル画像、公開日」を取得する。『これを一覧で表示する。』
-      limit: 6, //最新の６件の記事を取得する。
-    },
-  });
-
-  return data.contents; //取得した記事一覧を返却する。contentsは「APIから取得した"contentsプロパティ(記事配列)"」
-}
-
-////トップページ(記事一覧を表示)
+////Home(記事一覧を表示)
 export default async function Home() {
   //⬇︎await getBlogPosts()で「microCMSから取得した『記事一覧』」をpostsに格納する。
   const posts = await getBlogPosts();
