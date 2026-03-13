@@ -20,7 +20,23 @@ export async function getBlogPosts(): Promise<Blog[]> {
     },
   });
 
-  console.log(data); //取得した記事一覧を、一応console.logで確認。
+  console.log(data); //取得した「記事一覧」を一応console.logで確認。
 
   return data.contents; //取得した記事一覧を返却する。contentsは「APIから取得した"contentsプロパティ(記事配列)"」
+}
+
+////「記事詳細」を取得。
+//microCMSから"特定の記事1件"を取得
+export async function getBlogPost(id: string): Promise<Blog> {
+  //⬆︎:Promise<Blog>は「戻り値の型」を明示している。
+  //<Blog>はBlog型のオブジェクト1個("Blog型の配列"ではない。)
+  const data = await client.get<Blog>({
+    ///⬇︎api/v1/blog/{id}という「URLになる。」
+    endpoint: 'blog',
+    contentId: id,
+  });
+
+  console.log(data); //取得した「1件の記事詳細」を一応console.logで確認。『Server Component』なのでlogは「ブラウザではなくターミナル」に表示される。
+
+  return data;
 }

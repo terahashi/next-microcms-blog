@@ -6,8 +6,10 @@
 export type Blog = {
   id: string; //記事ID
   title: string; //記事タイトル
-  thumbnail: {
+  body: string; //記事の本文
+  thumbnail?: {
     url: string; //サムネイル画像URL
   };
   publishedAt: string; //投稿日時
+  category: { name: string }[]; //カテゴリー
 };
