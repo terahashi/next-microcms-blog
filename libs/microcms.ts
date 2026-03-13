@@ -1,6 +1,6 @@
 //これは「microcms-js-sdkの初期化」を行うファイルです。
 //「microcms-js-sdk」とは？
-//microCMS APIクライアントです。
+//microCMSを使うためのライブラリです。
 
 //「microCMS SDK」を読み込む
 import { createClient } from 'microcms-js-sdk';
