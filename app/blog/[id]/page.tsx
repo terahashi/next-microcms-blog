@@ -1,5 +1,6 @@
 //記事詳細ページ
 
+import Link from 'next/link';
 import dayjs from 'dayjs';
 import { getBlogPost } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『"1件"の記事データを取得するAPI関数』をまとめたファイル。
 import { client } from '@/libs/microcms';
@@ -38,9 +39,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
       <div>
         カテゴリー：
         {post.category.map((cate) => (
-          <span key={cate.name} className='mr-2'>
+          //<Link>でカテゴリ一覧ページへ遷移する。
+          //"cate.id"はmicroCMS「categories API」のカテゴリIDのこと。
+          <Link key={cate.id} href={`/category/${cate.id}`} className='mr-2'>
             {cate.name}
-          </span>
+          </Link>
         ))}
       </div>
       {/* 記事本文を表示 */}

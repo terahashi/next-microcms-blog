@@ -285,3 +285,48 @@ generateStaticParamsを使う場合(SSG)になる。
 
 
 
+
+
+
+
+------------------------------------------------
+------------------------------------------------
+🔶getCategoryPostsについて。
+
+
+・「特定カテゴリの記事一覧」を取得するために『getCategoryPosts()』を使用します。
+
+⬇️
+
+🍏例として「URLを叩くと・・・」
+①URL:　category/react　を開く。
+      ↓
+②params.slug = "react"になる。
+      ↓
+③「②」をgetCategoryPosts関数に渡します。
+const posts = await getCategoryPosts(params.slug);
+
+・category/[slug].page.tsxの
+『await getPostsByCategory(params.slug)』の(params.slug)が、
+
+・libs/blog.tsの
+export async function getCategoryPosts(categoryId: string): Promise<Blog[]>
+の
+(categoryId: string) = "react"として受け取ります。
+      ↓
+⑤その後「microCMS」に送信する。
+filters: `category[equals]${categoryId}`　でフィルター処理。
+categoryId = react
+そして
+category[equals]react
+になり、
+      ↓
+✅reactカテゴリの記事だけ取得して『記事一覧として表示します。』
+
+
+
+
+
+
+
+

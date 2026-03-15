@@ -1,7 +1,8 @@
 //microCMSの「blogエンドポイント」から『記事データを取得するAPI関数』をまとめたファイル。
 
 import { client } from './microcms'; //microCMSを使うためのライブラリです。
-import { Blog } from '../types/blog'; //名前付きインポート。TypeScriptで型定義した「型エイリアスをインポートする。」チーム開発で「名前付きインポート」は安全である。
+import { Blog } from '../types/blog'; //名前付きインポート。TypeScriptで型定義した「Blog型エイリアスをインポートする。」チーム開発で「名前付きインポート」は安全である。
+import { Category } from '../types/blog'; //「Category型エイリアスをインポートする。」
 
 ////「記事一覧」を取得。
 //SSG(静的生成)を使ってデータを取得します。
@@ -13,14 +14,14 @@ export async function getBlogPosts(): Promise<Blog[]> {
   //async関数は必ずPromiseを返すので、Promise<型>をと書くべし。
   const data = await client.get<{ contents: Blog[] }>({
     //⬆︎<{ contents: Blog[] }>はジェネリクス(型を後から渡す仕組み)です。取得したdataのcontentsの型が『完全にBlog[]と定義されます。』
-    endpoint: 'blog', //'blog'はエンドポイント名。
+    endpoint: 'blog', //'blog'はエンドポイント名。(MicroCMSのエンドポイントに書いている)
     queries: {
-      fields: 'id,title,thumbnail,publishedAt', //投稿した記事の「id、タイトル、サムネイル画像、公開日」を取得する。『これを一覧で表示する。』
+      fields: 'id,title,thumbnail,publishedAt', //fieldsは「"取得するデータの項目だけ"を指定するオプション。」投稿した記事の「id、タイトル、サムネイル画像、公開日」を取得する。
       limit: 6, //最新の６件の記事を取得する。
     },
   });
 
-  console.log(data); //取得した「記事一覧」を一応console.logで確認。
+  console.log('記事一覧です:', data); //取得した「記事一覧」を一応console.logで確認。
 
   return data.contents; //取得した記事一覧を返却する。contentsは「APIから取得した"contentsプロパティ(記事配列)"」
 }
@@ -39,4 +40,50 @@ export async function getBlogPost(id: string): Promise<Blog> {
   console.log('1件の記事詳細です:', data); //取得した「1件の記事詳細」を一応console.logで確認。『Server Component』なのでlogは「ブラウザではなくターミナル」に表示される。
 
   return data;
+}
+
+////「カテゴリボタン用のカテゴリ一覧」を取得
+//使い所：トップページ / 記事詳細ページ
+//カテゴリをタグのように並べて表示するため。
+//例：[Next.js] [React] [JavaScript]
+export async function getCategories(): Promise<Category[]> {
+  const data = await client.get<{ contents: Category[] }>({
+    endpoint: 'categories', //categories APIのエンドポイント名。(MicroCMSのエンドポイントに書いている)
+    queries: {
+      fields: 'id,name', //必要なものは「カテゴリID、カテゴリ名」だけ。
+      limit: 100, //最新の100件のカテゴリを取得する。
+    },
+  });
+
+  console.log('カテゴリボタン用のカテゴリ一覧です:', data); //「取得したカテゴリボタン用のカテゴリ一覧」をconsole.logで確認。
+
+  return data.contents; //取得した「カテゴリ一覧」を返却する。
+}
+
+////「特定カテゴリの記事一覧」を取得
+//使い所：カテゴリページ(category/[slug].page.tsx)で使用する。
+//microCMSから「指定したカテゴリIDに属する記事一覧」を取得する。
+export async function getCategoryPosts(categoryId: string): Promise<Blog[]> {
+  //⬆︎URL: category/[slug]から "ReactカテゴリやNext.jsカテゴリ"を受け取る関数です。
+  //①URLを叩いて[slug]を取得　➡️ URL:/category/react　➡️ params.slug = "reactカテゴリ"になる。
+  //②getCategoryPosts(params.slug)から、上記のgetCategoryPosts(categoryId: string)に渡ってきます。 ➡️ ここでcategoryId = "react"になります。
+  //③microCMSに「フィルタ」を渡す。 ➡️ filters: `category[equals]${categoryId}`, ➡️ つまりcategory[equals]react ➡️ microCMSは「categoryがreactの記事だけ」を返す。
+  //④結果として「category/[slug]/page.tsx で記事一覧として表示します。」
+  const data = await client.get<{ contents: Blog[] }>({
+    endpoint: 'blog',
+    queries: {
+      filters: `category[equals]${categoryId}`,
+      //⬆︎③microCMSに「フィルタ」を渡す。
+      //categoryは、blog APIのフィールド名(category)
+      //[equals]で比較。
+      //${categoryId}は、比較する値（reactなど）
+      //・categoryフィールド名がreactに等しい記事だけを取得する。
+      fields: 'id,title,thumbnail,publishedAt',
+      limit: 100,
+    },
+  });
+
+  console.log('特定カテゴリの記事一覧です:', data); //「取得した特定カテゴリの記事一覧」をconsole.logで確認。
+
+  return data.contents;
 }
