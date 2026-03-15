@@ -2,6 +2,7 @@
 
 import dayjs from 'dayjs';
 import { getBlogPost } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『"1件"の記事データを取得するAPI関数』をまとめたファイル。
+import { client } from '@/libs/microcms';
 
 //// 記事詳細ページの生成
 // blog/abc123にアクセスすると「BlogPostPage()」が実行されます。
@@ -46,4 +47,31 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
       <div dangerouslySetInnerHTML={{ __html: post.body }} />
     </main>
   );
+}
+
+////静的パスを生成する。generateStaticParamsを使う場合(SSG)になる。
+//generateStaticParamsは「Next.jsにどのURLページを事前生成するか教える関数。」
+//generateStaticParams は「特別な関数」であり『Next.jsがファイルを見つけて自動実行する特殊関数』です。
+//「静的パス」とは？「動的ルートを持つページ」を『ビルド時に生成して、あらかじめHTMLを生成する。』
+//その結果"ユーザーがアクセスした時にすぐに表示してくれる。"
+export async function generateStaticParams() {
+  //⬇︎microCMSの「blogエンドポイント」から『全記事のIDを取得する。』
+  //getAllcontentIdsメソッドは"microCMS専用のメソッド"であり「指定エンドポイントの全コンテンツIDを取得するメソッド」です。
+  //"contentIds"は全記事IDの配列。
+  const contentIds = await client.getAllContentIds({ endpoint: 'blog' });
+
+  //ターミナルに全記事のID配列が表示される。
+  console.log(contentIds); //['13vosvkwy9', '8a9rdsj6l'] として表示されます。
+
+  //⬇︎「next.jsが理解できる形式に変換」する。
+  //mapメソッドで配列(全記事)を1つずつ処理。
+  return contentIds.map((contentId) => {
+    //ターミナルには各記事IDを表示して確認。
+    console.log('記事IDです:', contentId); //「記事ID: 13vosvkwy9」として表示されます。
+
+    return {
+      // Next.jsが理解できる { id: contentId } に変換して返却している。」
+      id: contentId, //各記事を返却する。
+    };
+  });
 }

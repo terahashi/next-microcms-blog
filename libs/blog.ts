@@ -36,7 +36,7 @@ export async function getBlogPost(id: string): Promise<Blog> {
     contentId: id,
   });
 
-  console.log(data); //取得した「1件の記事詳細」を一応console.logで確認。『Server Component』なのでlogは「ブラウザではなくターミナル」に表示される。
+  console.log('1件の記事詳細です:', data); //取得した「1件の記事詳細」を一応console.logで確認。『Server Component』なのでlogは「ブラウザではなくターミナル」に表示される。
 
   return data;
 }
