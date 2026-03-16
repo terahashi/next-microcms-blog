@@ -46,18 +46,23 @@ export async function getBlogPost(id: string): Promise<Blog> {
 //使い所：トップページ / 記事詳細ページ
 //カテゴリをタグのように並べて表示するため。
 //例：[Next.js] [React] [JavaScript]
-export async function getCategories(): Promise<Category[]> {
-  const data = await client.get<{ contents: Category[] }>({
-    endpoint: 'categories', //categories APIのエンドポイント名。(MicroCMSのエンドポイントに書いている)
-    queries: {
-      fields: 'id,name', //必要なものは「カテゴリID、カテゴリ名」だけ。
-      limit: 100, //最新の100件のカテゴリを取得する。
-    },
+export async function getCategory(categoryId: string): Promise<Category> {
+  const data = await client.get<Category>({
+    endpoint: 'categories', //どのAPIを使うか？ ➡️ microCMSの「categories API」を指定する。
+    contentId: categoryId, //どのIDのデータを取得するか？
+    //⬆︎microCMSのcategories APIに「取得したいカテゴリID(例: nd8f-tyyo4 = react)」を指定する。
+    //つまり「"contentId"に categoryId(例:nd8f-tyyo4 = react) を指定して」そのIDのデータを取得する。
+    //処理の流れ: getCategory("nd8f-tyyo4")
+    //         ⬇︎
+    //microCMS categories API
+    //microcms/api/v1/categories/nd8f-tyyo4
+    //         ⬇︎
+    //カテゴリデータ1件取得
   });
 
   console.log('カテゴリボタン用のカテゴリ一覧です:', data); //「取得したカテゴリボタン用のカテゴリ一覧」をconsole.logで確認。
 
-  return data.contents; //取得した「カテゴリ一覧」を返却する。
+  return data; //取得した「カテゴリ一覧」を返却する。
 }
 
 ////「特定カテゴリの記事一覧」を取得
@@ -65,20 +70,20 @@ export async function getCategories(): Promise<Category[]> {
 //microCMSから「指定したカテゴリIDに属する記事一覧」を取得する。
 export async function getCategoryPosts(categoryId: string): Promise<Blog[]> {
   //⬆︎URL: category/[slug]から "ReactカテゴリやNext.jsカテゴリ"を受け取る関数です。
-  //①URLを叩いて[slug]を取得　➡️ URL:/category/react　➡️ params.slug = "reactカテゴリ"になる。
-  //②getCategoryPosts(params.slug)から、上記のgetCategoryPosts(categoryId: string)に渡ってきます。 ➡️ ここでcategoryId = "react"になります。
-  //③microCMSに「フィルタ」を渡す。 ➡️ filters: `category[equals]${categoryId}`, ➡️ つまりcategory[equals]react ➡️ microCMSは「categoryがreactの記事だけ」を返す。
+  //①URLを叩いて[slug]を取得　➡️ URL:/category/例:react　➡️ [slug] = "例:reactカテゴリ"になる。
+  //②[slug]/page.tsxのgetCategoryPosts(slug)から、上記のgetCategoryPosts(categoryId: string)に渡ってきます。 ➡️ ここでcategoryId = "例:react"になります。
+  //③microCMSに「フィルタ」を渡す。 ➡️ filters: `category[contains]${categoryId}`, ➡️ つまりcategory[contains]例:react ➡️ microCMSは「categoryに例:reactが含まれている記事だけ」を返す。
   //④結果として「category/[slug]/page.tsx で記事一覧として表示します。」
   const data = await client.get<{ contents: Blog[] }>({
     endpoint: 'blog',
     queries: {
-      filters: `category[equals]${categoryId}`,
+      filters: `category[contains]${categoryId}`,
       //⬆︎③microCMSに「フィルタ」を渡す。
       //categoryは、blog APIのフィールド名(category)
-      //[equals]で比較。
+      //[contains]は「配列の中に指定したIDが含まれている」という意味。
       //${categoryId}は、比較する値（reactなど）
-      //・categoryフィールド名がreactに等しい記事だけを取得する。
-      fields: 'id,title,thumbnail,publishedAt',
+      //・つまり「category配列の中に categoryId = 例:react が含まれている記事」を取得する。
+      fields: 'id,title,thumbnail,publishedAt,category',
       limit: 100,
     },
   });

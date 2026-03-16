@@ -301,30 +301,28 @@ generateStaticParamsを使う場合(SSG)になる。
 🍏例として「URLを叩くと・・・」
 ①URL:　category/react　を開く。
       ↓
-②params.slug = "react"になる。
+②params = "例:react"になる。
       ↓
 ③「②」をgetCategoryPosts関数に渡します。
-const posts = await getCategoryPosts(params.slug);
+const { slug } = await params;
+const posts = await getCategoryPosts(slug);
 
 ・category/[slug].page.tsxの
-『await getPostsByCategory(params.slug)』の(params.slug)が、
+『await getCategoryPosts(slug)』の(slug)が、
 
 ・libs/blog.tsの
 export async function getCategoryPosts(categoryId: string): Promise<Blog[]>
-の
-(categoryId: string) = "react"として受け取ります。
+の、(categoryId: string) = "例:react"として受け取ります。
+
       ↓
 ⑤その後「microCMS」に送信する。
-filters: `category[equals]${categoryId}`　でフィルター処理。
-categoryId = react
+filters: `category[contains]${categoryId}`　でフィルター処理。
+categoryId = 例:react
 そして
-category[equals]react
+category[contains]例:react
 になり、
       ↓
 ✅reactカテゴリの記事だけ取得して『記事一覧として表示します。』
-
-
-
 
 
 

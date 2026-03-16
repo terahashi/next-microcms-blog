@@ -1,10 +1,15 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  //以下を追加
-  devIndicators: false, //「開発中の表示」を非表示
+  //⬇︎「開発中の表示」を非表示
+  devIndicators: false,
 
+  //⬇︎microCMSの画像を表示を許可。
+  images: {
+    domains: ['images.microcms-assets.io'],
+  },
+
+  //⬇︎styledComponentsを有効化
   compiler: {
     styledComponents: true,
   },
