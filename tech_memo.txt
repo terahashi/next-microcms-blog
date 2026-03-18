@@ -328,3 +328,71 @@ category[contains]例:react
 
 
 
+
+
+
+
+------------------------------------------------
+------------------------------------------------
+🔶(‼️libs/blog.tsファイル)Promise<Blog[]>、　<{ contents: Blog[] }>、　return data.contents;について。
+
+■各箇所は「何を表しているのか？」
+①Promise<Blog[]>
+・この関数は「"最終的"に『Blog配列』」を返すよ、という意味。
+
+②<{ contents: Blog[] }>
+・APIから返ってくるデータの型（ジェネリクス）
+
+③return data.contents;
+・必要なものだけ取り出す
+
+
+
+✅手順の流れ
+・ステップ① API取得
+const data = await client.get<{ contents: Blog[] }>();
+
+「dataの中身」は…
+data = {
+   contents: Blog[]
+}
+
+・ステップ② 必要なものだけ取り出す。
+return data.contents;
+
+・ステップ③ 戻り値と一致
+Promise<Blog[]>
+
+
+---------------------
+(参考ファイル)libs/blog.tsファイル
+---------------------
+export async function getBlogPosts(): Promise<Blog[]> {
+  const data = await client.get<{ contents: Blog[] }>({
+
+    endpoint: 'blog',
+    queries: {
+      fields: 'id,title,thumbnail,publishedAt',
+      limit: 6,
+    },
+  });
+
+  console.log('記事一覧です:', data);
+
+  return data.contents;
+}
+
+
+
+
+
+
+
+
+
+------------------------------------------------
+------------------------------------------------
+🔶
+
+
+

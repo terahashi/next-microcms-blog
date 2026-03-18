@@ -3,28 +3,43 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { getCategory, getCategoryPosts } from '@/libs/blog';
+import { getCategory, getCategoryPageNation } from '@/libs/blog';
 
 ////「特定カテゴリの記事一覧を取得して表示する」
-export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CategoryPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ page?: string }> }) {
   //⬆︎① { params } はNext.js(App Router)から自動的に渡される引数。
   //・{ params }に渡ってくるものは何か？ ➡️ ⭐️URLの動的部分[slug]の値が、自動で{ params }に渡される。 ➡️ (URL例)app/category/[slug]/page.tsx
   //・つまり{ params }の中身は、[slug]の値が渡ってくるということ。
 
-  //⬇︎②paramsは、Next.jsの最近の仕様では「Promise(非同期)になった。」 ➡️ 上記の { params: Promise<{ slug: string }> }) の部分。
+  //⬆︎②{ searchParams }は、URLのクエリパラメータ(page?: stringなので"文字列")を取得する。 ➡️ (URL例)app/category/[slug]/page.tsx?page="2"
+
+  //⬇︎③paramsは、Next.jsの最近の仕様では「Promise(非同期)になった。」 ➡️ 上記の { params: Promise<{ slug: string }> }) の部分。
   //・だから「下記でparamsを使用する場合は『awaitが必要である。』」
   //・URLの値(/category/reactなど)だった場合 ➡️ Paramsを引数で受け取り ➡️ await params;で使用する。 ➡️ { slug }で分割代入すると、slug = "react" になる。
   const { slug } = await params;
-  console.log('■特定カテゴリの記事一覧の「slugを確認」:', slug);
+  console.log('■特定カテゴリの記事一覧の「slugを確認」([slug]/page.tsx):', slug);
 
-  //⬇︎③「特定カテゴリの記事一覧」をmicroCMSから取得して『postsに格納する。』
-  //getCategoryPosts()は、libs/blog.tsで定義されて実行している。
-  const posts = await getCategoryPosts(slug);
-  console.log('■postsで確認:', posts);
+  //④現在の「クエリパラメータ」を取得してNumber()で数値に変換する。(例page="2"だったら2に変換する。)
+  const sp = await searchParams; //URLのクエリパラメータ。
+  console.log('■sp(ここでは文字列の数字):', sp);
 
-  //⬇︎④microCMSから取得した「記事一覧(posts)」から『"クリックされたカテゴリID(slug)"と"一致するカテゴリ名"を取得する。』
+  const currentPage = Number(sp.page) || 1;
+  console.log('■sp(ページネーション[1]ボタンクリックすると確認できる):', sp.page);
+
+  const limit = 6; //1ページに表示する記事数を「6件に設定」
+
+  //⬇︎⑤「特定カテゴリ + ページネーション対応の記事一覧」をmicroCMSから取得して『postsに格納する。』
+  //getCategoryPageNation()は、libs/blog.tsで定義されて実行している。
+  const data = await getCategoryPageNation(slug, currentPage, limit);
+  const posts = data.contents;
+  console.log('■postsで確認([slug]/page.tsx):', posts);
+
+  //⬇︎⑥microCMSから取得した"記事一覧"から『"クリックされたカテゴリID(slug)"と"一致するカテゴリ名"を取得する。』
   const category = await getCategory(slug);
   const categoryName = category.name;
+
+  //⬇︎⑦ページネーションで使用するために、totalPages(総記事数)を取得する。
+  const totalPages = Math.ceil(data.totalCount / limit); //Math.ceil()は「小数点以下を切り上げ。」
 
   return (
     <div>
@@ -42,6 +57,58 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           </Link>
         </div>
       ))}
+
+      {/* ページネーション */}
+      <div className='flex gap-2 mt-6 items-center'>
+        {/* 前へ */}
+        {/* {currentPage > 1 && (
+          <Link href={`/category/${slug}?page=${currentPage - 1}`} className='px-3 py-1 border'>
+            ←
+          </Link>
+        )} */}
+
+        {/* ページ番号（最大5件表示 + ページ数の省略 ...） */}
+        {(() => {
+          //⬇︎Math.max()は「どちらかの値が大きければ大きい値を返す。」
+          //currentPage = 1。➡️ Math.max(1, 1-2)なので、start = 1となる
+          const start = Math.max(1, currentPage - 2);
+
+          //Math.min()は「どちらかの値が小さければ小さい値を返す。」
+          //currentPage = 5。➡️ Math.min(5, 5+2)なので、end = 5となる
+          const end = Math.min(totalPages, currentPage + 2);
+
+          //⬇︎Array.from(①, ②)は「start〜endまでの連番配列を作っている」
+          //①は配列の元(長さだけ決める) ➡️ { length: end - start + 1 }の部分 ➡️ 例:length = 5になる
+
+          //②はmap関数で「中身を作る処理」です。➡️ (_, i) => start + iの部分
+          //(_, i) ➡️ _は配列の要素(今回は使わない) ➡️ iはインデックス(0,1,2,3,4)
+          //start = 3だった場合、end = 7の場合 ➡️ length = 5になり『ループ回数となる。』
+          //iは「ループ回数の番号(つまり5回)」➡️ iは「0, 1, 2, 3, 4」 ➡️ 計算すると、start + i = 『3, 4, 5, 6, 7』になる。
+          //➡️ 結果 pages = [3, 4, 5, 6, 7]になる。
+          const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+
+          return (
+            <>
+              {/* {start > 1 && <span className='px-2'>...</span>}
+
+              {pages.map((p) => (
+                <Link key={p} href={`/category/${slug}?page=${p}`} className={`px-3 py-1 border ${p === currentPage ? 'bg-blue-500 text-white' : ''}`}>
+                  {p}
+                </Link>
+              ))}
+
+              {end < totalPages && <span className='px-2'>...</span>} */}
+            </>
+          );
+        })()}
+
+        {/* 次へ */}
+        {/* {currentPage < totalPages && (
+          <Link href={`/category/${slug}?page=${currentPage + 1}`} className='px-3 py-1 border'>
+            →
+          </Link>
+        )} */}
+      </div>
     </div>
   );
 }
