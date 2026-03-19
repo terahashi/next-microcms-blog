@@ -5,27 +5,27 @@ import { Blog } from '../types/blog'; //名前付きインポート。「Blog型
 import { Category } from '../types/blog'; //「Category型エイリアスをインポートする。」
 import { BlogListResponse } from '../types/blog'; // 「Pagenation型エイリアスをインポートする。」
 
-////「記事一覧」を取得。
-//SSG(静的生成)を使ってデータを取得します。
-//なぜSSG(静的生成)を使う？➡︎『microCMS APIをビルド時に取得し、Next.jsでHTMLを生成するから』です。
-export async function getBlogPosts(): Promise<Blog[]> {
-  //⬆︎:Promise<Blog[]>は「戻り値の型」を明示している。
-  //意味:「このgetBlogpots関数は Promiseが戻り値で、中身は<Blog[]>」になる。
-  //Blog[]の意味:「Blog型オブジェクトの配列」という意味。つまり記事データの配列が配列が返ってくる。
-  //async関数は必ずPromiseを返すので、Promise<型>をと書くべし。
-  const data = await client.get<{ contents: Blog[] }>({
-    //⬆︎<{ contents: Blog[] }>はジェネリクス(型を後から渡す仕組み)です。取得したdataのcontentsの型が『完全にBlog[]と定義されます。』
-    endpoint: 'blog', //'blog'はエンドポイント名。(MicroCMSのエンドポイントに書いている)
-    queries: {
-      fields: 'id,title,thumbnail,publishedAt', //fieldsは「"取得するデータの項目だけ"を指定するオプション。」投稿した記事の「id、タイトル、サムネイル画像、公開日」を取得する。
-      limit: 6, //最新の６件の記事を取得する。
-    },
-  });
+// ////「記事一覧」を取得。
+// //SSG(静的生成)を使ってデータを取得します。
+// //なぜSSG(静的生成)を使う？➡︎『microCMS APIをビルド時に取得し、Next.jsでHTMLを生成するから』です。
+// export async function getBlogPosts(): Promise<Blog[]> {
+//   //⬆︎:Promise<Blog[]>は「戻り値の型」を明示している。
+//   //意味:「このgetBlogpots関数は Promiseが戻り値で、中身は<Blog[]>」になる。
+//   //Blog[]の意味:「Blog型オブジェクトの配列」という意味。つまり記事データの配列が配列が返ってくる。
+//   //async関数は必ずPromiseを返すので、Promise<型>をと書くべし。
+//   const data = await client.get<{ contents: Blog[] }>({
+//     //⬆︎<{ contents: Blog[] }>はジェネリクス(型を後から渡す仕組み)です。取得したdataのcontentsの型が『完全にBlog[]と定義されます。』
+//     endpoint: 'blog', //'blog'はエンドポイント名。(MicroCMSのエンドポイントに書いている)
+//     queries: {
+//       fields: 'id,title,thumbnail,publishedAt', //fieldsは「"取得するデータの項目だけ"を指定するオプション。」投稿した記事の「id、タイトル、サムネイル画像、公開日」を取得する。
+//       limit: 6, //最新の６件の記事を取得する。
+//     },
+//   });
 
-  console.log('記事一覧です:', data); //取得した「記事一覧」を一応console.logで確認。
+//   console.log('記事一覧です:', data); //取得した「記事一覧」を一応console.logで確認。
 
-  return data.contents; //取得した記事一覧を返却する。contentsは「APIから取得した"contentsプロパティ(記事配列)"」
-}
+//   return data.contents; //取得した記事一覧を返却する。contentsは「APIから取得した"contentsプロパティ(記事配列)"」
+// }
 
 ////「記事詳細」を取得。
 //microCMSから"特定の記事1件"を取得
@@ -44,7 +44,7 @@ export async function getBlogPost(id: string): Promise<Blog> {
 }
 
 ////「カテゴリボタン用のカテゴリ一覧」を取得
-//使い所：トップページ / 記事詳細ページ
+//使い所： 記事詳細ページ / 特定カテゴリの記事一覧を取得して表示する」ページ
 //カテゴリをタグのように並べて表示するため。
 //例：[Next.js] [React] [JavaScript]
 export async function getCategory(categoryId: string): Promise<Category> {
@@ -66,14 +66,15 @@ export async function getCategory(categoryId: string): Promise<Category> {
   return data; //取得した「カテゴリ一覧」を返却する。
 }
 
-////「特定カテゴリ + ページネーション対応の記事一覧」
-//元々は『下に記載している⭐️「特定カテゴリの記事一覧」を取得  と　⭐️「ページネーション用の記事一覧」を取得　です。』
-export async function getCategoryPageNation(categoryId: string, page: number = 1, limit: number = 10): Promise<BlogListResponse> {
+////「ページネーション用の記事一覧(記事一覧表示でも使用可能 + 特定カテゴリの記事一覧」
+//元々は『下に記載している⭐️「ページネーション用の記事一覧(記事一覧表示でも使用可能)」と⭐️「特定カテゴリの記事一覧」を取得 です。』
+//使い所： [slug]/page.tsxの『特定カテゴリの記事一覧』に表示しているページネーション。
+export async function getCategoryPagination(categoryId: string, page: number = 1, limit: number = 10): Promise<BlogListResponse> {
   //⬇︎offsetの意味は「記事の開始位置のこと。」➡️ 記事の何軒目を取得するか？ということ。
   //例えば「記事が1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ...」こう存在するとする。
   //・下記の計算で1ページ目（limit = 10）だった場合 ➡️「offset = 0」だった場合は ➡️ 0件スキップして、1から10件取る。
   //・下記の計算で2ページ目（limit = 10）だった場合 ➡️➡️ 10件スキップして、11〜20を取得する。
-  //・「引数pageと引数limit」は、『使用するgetPageNation(page, limit)から渡されてくる。』
+  //・「引数pageと引数limit」は、『使用するgetPagination(page, limit)から渡されてくる。』
   const offset = (page - 1) * limit;
 
   const data = await client.get<BlogListResponse>({
@@ -92,6 +93,27 @@ export async function getCategoryPageNation(categoryId: string, page: number = 1
 
   console.log('特定カテゴリ + ページネーション対応の記事一覧:', data);
 
+  return data;
+}
+
+////⭐️「ページネーション用の記事一覧(記事一覧表示でも使用可能)」を取得
+//使い所： app/page.tsxの記事一覧に表示しているページネーション。
+export async function getPagination(page: number = 1, limit: number = 10): Promise<BlogListResponse> {
+  //⬇︎offsetの意味は「記事の開始位置のこと。」➡️ 記事の何軒目を取得するか？ということ。
+  //例えば「記事が1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ...」こう存在するとする。
+  //・下記の計算で1ページ目（page = 1, limit = 10）だった場合 ➡️「offset = 0」だった場合は ➡️ 0件スキップして、1から10件取る。
+  //・下記の計算で2ページ目（page = 2, limit = 10）だった場合 ➡️ 10件スキップして、11〜20を取得する。
+  //・「引数pageと引数limit」は、『使用するgetPagination(page, limit)から渡されてくる。』
+  const offset = (page - 1) * limit;
+
+  const data = await client.get<BlogListResponse>({
+    endpoint: 'blog',
+    queries: {
+      limit,
+      offset,
+    },
+  });
+  console.log('ページネーション:', data);
   return data;
 }
 
@@ -119,24 +141,4 @@ export async function getCategoryPageNation(categoryId: string, page: number = 1
 //   });
 //   console.log('特定カテゴリの記事一覧です:', data); //「取得した特定カテゴリの記事一覧」をconsole.logで確認。
 //   return data.contents;
-// }
-
-// ////⭐️「ページネーション用の記事一覧」を取得
-// export async function getPageNation(page: number = 1, limit: number = 10): Promise<BlogListResponse> {
-//   //⬇︎offsetの意味は「記事の開始位置のこと。」➡️ 記事の何軒目を取得するか？ということ。
-//   //例えば「記事が1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, ...」こう存在するとする。
-//   //・下記の計算で1ページ目（limit = 10）だった場合 ➡️「offset = 0」だった場合は ➡️ 0件スキップして、1から10件取る。
-//   //・下記の計算で2ページ目（limit = 10）だった場合 ➡️➡️ 10件スキップして、11〜20を取得する。
-//   //・「引数pageと引数limit」は、『使用するgetPageNation(page, limit)から渡されてくる。』
-//   const offset = (page - 1) * limit;
-
-//   const data = await client.get<BlogListResponse>({
-//     endpoint: 'blog',
-//     queries: {
-//       limit,
-//       offset,
-//     },
-//   });
-//   console.log('ページネーション:', data);
-//   return data;
 // }
