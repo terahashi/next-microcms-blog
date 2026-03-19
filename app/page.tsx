@@ -5,16 +5,25 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { getBlogPosts } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『記事データを取得するAPI関数』をまとめたファイル。
+import { getPagination } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『記事データを取得するAPI関数』をまとめたファイル。
+
+//ページネーション(コンポーネント)
+import Pagination from '@/components/Pagination';
 
 ////ISR(定期で更新)
 //一定時間毎にページを再生成できる。(次のアクセス時にページを再生成)
 export const revalidate = 60; //60秒経過でページを再生成する
 
 ////Home(記事一覧を表示)
-export default async function Home() {
-  //⬇︎await getBlogPosts()で「microCMSから取得した『記事一覧』」をpostsに格納する。
-  const posts = await getBlogPosts();
+export default async function Home({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  //⬇︎ページネーション用: 現在の「クエリパラメータ」を取得してNumber()で数値に変換する。(例page="2"だったら2に変換する。)
+  const sp = await searchParams; //URLのクエリパラメータ。
+  const currentPage = Number(sp.page) || 1;
+  const limit = 7; //1ページに表示する記事数を設定する。
+  const data = await getPagination(currentPage, limit);
+  const posts = data.contents;
+  //⬇︎ページネーションで使用するために、totalPages(総記事数)を取得する。
+  const totalPages = Math.ceil(data.totalCount / limit); //Math.ceil()は「小数点以下を切り上げ。」
 
   return (
     <div className='flex min-h-screen items-center justify-center bg-zinc-50 font-sans '>
@@ -36,6 +45,9 @@ export default async function Home() {
             ))}
           </ul>
         </div>
+
+        {/*  ページネーション */}
+        <Pagination currentPage={currentPage} totalPages={totalPages} basePath='/' />
       </main>
     </div>
   );
