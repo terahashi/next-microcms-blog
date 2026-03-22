@@ -2,6 +2,12 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
+//コンポーネント
+import StyledComponentsRegistry from '@/libs/styled-components-registry';
+import { Header } from '@/components/common/Header';
+import { Footer } from '@/components/common/Footer';
+import { Nav } from '@/components/common/Nav'; //追従するナビゲーション
+
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -24,7 +30,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <StyledComponentsRegistry>
+          <Header />
+          <Nav />
+          {children}
+          <Footer />
+        </StyledComponentsRegistry>
+      </body>
     </html>
   );
 }
