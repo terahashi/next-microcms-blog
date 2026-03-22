@@ -8,8 +8,8 @@ import Link from 'next/link';
 import { getPagination } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『記事データを取得するAPI関数』をまとめたファイル。
 
 //ページネーション(コンポーネント)
-import Pagination from '@/components/Pagination';
 import { PageContainer, Wrapper, Inner } from '@/components/common/LayoutPrimitives';
+import Pagination from '@/components/Pagination';
 
 ////ISR(定期で更新)
 //一定時間毎にページを再生成できる。(次のアクセス時にページを再生成)
