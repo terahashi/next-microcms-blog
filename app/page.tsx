@@ -8,7 +8,7 @@ import Link from 'next/link';
 import { getPagination } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『記事データを取得するAPI関数』をまとめたファイル。
 
 //ページネーション(コンポーネント)
-import { PageContainer, Wrapper, Inner } from '@/components/common/LayoutPrimitives';
+import { Wrapper, Inner } from '@/components/common/LayoutPrimitives';
 import Pagination from '@/components/Pagination';
 
 ////ISR(定期で更新)
@@ -27,35 +27,33 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ p
   const totalPages = Math.ceil(data.totalCount / limit); //Math.ceil()は「小数点以下を切り上げ。」
 
   return (
-    <PageContainer>
-      <Wrapper>
-        <Inner>
-          <div className='flex min-h-screen items-center justify-center bg-zinc-50 font-sans '>
-            <main>
-              <div>
-                <h1>ブログ記事一覧</h1>
-              </div>
+    <Wrapper>
+      <Inner>
+        <div className='flex min-h-screen items-center justify-center font-sans '>
+          <main>
+            <div>
+              <h1>ブログ記事一覧</h1>
+            </div>
 
-              {/* ⬇︎取得した記事一覧(posts)を「mapメソッド」で表示する。(ちなみに"配列なので"mapが使用できます) */}
-              <div>
-                <ul>
-                  {posts.map((post) => (
-                    <li key={post.id}>
-                      <Link href={`/blog/${post.id}`}>
-                        {/* 記事タイトルを表示する */}
-                        {post.title}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {/* ⬇︎取得した記事一覧(posts)を「mapメソッド」で表示する。(ちなみに"配列なので"mapが使用できます) */}
+            <div>
+              <ul>
+                {posts.map((post) => (
+                  <li key={post.id}>
+                    <Link href={`/blog/${post.id}`}>
+                      {/* 記事タイトルを表示する */}
+                      {post.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-              {/*  ページネーション */}
-              <Pagination currentPage={currentPage} totalPages={totalPages} basePath='/' />
-            </main>
-          </div>
-        </Inner>
-      </Wrapper>
-    </PageContainer>
+            {/*  ページネーション */}
+            <Pagination currentPage={currentPage} totalPages={totalPages} basePath='/' />
+          </main>
+        </div>
+      </Inner>
+    </Wrapper>
   );
 }

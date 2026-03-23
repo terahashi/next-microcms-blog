@@ -12,9 +12,7 @@ const NavWrap = styled.nav`
   position: sticky;
   top: 0;
   width: 100%;
-  box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.2);
-  background-color: #fff;
-  color: #000;
+  border-bottom: 1px solid var(--border-ligner);
   z-index: 1000;
 
   .pc-menu {
@@ -27,7 +25,7 @@ const NavWrap = styled.nav`
   a {
     font-size: 1.1rem;
     position: relative; //::after用に必須
-    color: #000;
+    color: #fff;
 
     &.is-active {
       font-weight: bold;
@@ -39,13 +37,14 @@ const NavWrap = styled.nav`
       bottom: -2px;
       width: 100%;
       height: 2.5px;
-      /* background-color: #000; */
+      background-color: #ffffff;
     }
   }
 `;
-//import { Inner }を上書きして使用できます。
-const NavInner = styled(Inner)`
-  padding: 10px var(--layout-padding);
+
+const NavWrapper = styled(Wrapper)`
+  padding-top: 0;
+  padding-bottom: 0;
 `;
 
 export const Nav = () => {
@@ -54,18 +53,18 @@ export const Nav = () => {
 
   return (
     <NavWrap>
-      <Wrapper>
-        <NavInner>
+      <NavWrapper>
+        <Inner>
           <div className='pc-menu gap-x-4 md:gap-x-7'>
-            <Link href='/' className={clsx(pathname === '/' && 'is-active')}>
+            <Link href='/' className={clsx('pt-[10px] pb-[10px] p-[0px]', pathname === '/' && 'is-active')}>
               Top
             </Link>
-            <Link href='/about' className={clsx(pathname === '/about' && 'is-active')}>
+            <Link href='/about' className={clsx('pt-[10px] pb-[10px] p-[0px]', pathname === '/about' && 'is-active')}>
               About
             </Link>
           </div>
-        </NavInner>
-      </Wrapper>
+        </Inner>
+      </NavWrapper>
     </NavWrap>
   );
 };
