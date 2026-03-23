@@ -4,18 +4,10 @@
 import styled from 'styled-components';
 import { breakpoints } from '@/styles/breakpoints';
 
-//ページ全体コンテナ
-const PageContainer = styled.div`
-  padding-top: var(--header-height);
-  min-height: unset;
-
-  /* @media screen and (min-width: ${breakpoints.tablet}) {
-    min-height: 100dvh;
-  } */
-`;
-
 //Wrapper
 const Wrapper = styled.div`
+  padding-top: clamp(16px, 4vw, 24px);
+  padding-bottom: clamp(16px, 4vw, 24px);
   padding-left: clamp(16px, 4vw, 32px);
   padding-right: clamp(16px, 4vw, 32px);
 `;
@@ -24,8 +16,7 @@ const Wrapper = styled.div`
 const Inner = styled.div`
   width: 100%;
   max-width: var(--layout-max-width);
-  padding-inline: var(--layout-padding);
   margin: 0 auto;
 `;
 
-export { PageContainer, Wrapper, Inner };
+export { Wrapper, Inner };
