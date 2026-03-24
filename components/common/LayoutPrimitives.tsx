@@ -2,7 +2,6 @@
 
 'use client';
 import styled from 'styled-components';
-import { breakpoints } from '@/styles/breakpoints';
 
 //Wrapper
 const Wrapper = styled.div`

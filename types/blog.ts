@@ -13,6 +13,7 @@ export type Blog = {
   };
   publishedAt: string; //投稿日時
   category: Category[]; //カテゴリー。下で書いた「Categoryを再利用（参照）」
+  emoji: string; //絵文字
 };
 //Blog型（1記事）の中身
 // {

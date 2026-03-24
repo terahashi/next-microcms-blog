@@ -31,10 +31,15 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
 
   return (
     <main>
+      {/* 絵文字を表示 */}
+      <p>{post.emoji}</p>
+
       {/* タイトルを表示 */}
       <h1>{post.title}</h1>
+
       {/* 日付を表示 */}
       <div>{formattedDate}</div>
+
       {/* カテゴリーを表示 */}
       <div>
         カテゴリー：

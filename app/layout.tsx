@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { Noto_Sans_JP } from 'next/font/google';
 import './globals.css';
 
 //コンポーネント
@@ -7,6 +8,11 @@ import StyledComponentsRegistry from '@/libs/styled-components-registry';
 import { Header } from '@/components/common/Header';
 import { Footer } from '@/components/common/Footer';
 import { Nav } from '@/components/common/Nav'; //追従するナビゲーション
+
+const notoSans = Noto_Sans_JP({
+  variable: '--font-noto-sans-jp',
+  subsets: ['latin'],
+});
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -30,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${notoSans.variable} ${geistSans.variable} ${geistMono.variable} antialiased`}>
         <StyledComponentsRegistry>
           <Header />
           <Nav />
