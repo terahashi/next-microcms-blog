@@ -8,6 +8,7 @@ const HeaderWrap = styled.header`
   /* height: var(--header-height); */
   width: 100%;
   z-index: 1000;
+  background-color: #130e30;
   .logo {
     position: relative;
   }
@@ -38,7 +39,7 @@ export const Header = () => {
         <HeaderInner>
           <div className='logo'>
             <Link href='/'>
-              <h1 className='mb-0 font-bold text-[1.3rem] md:text-[1.5rem]'>DevLog</h1>
+              <h1 className='mb-0 font-bold text-[1.7rem] md:text-[2.5rem]'>DevLog</h1>
             </Link>
           </div>
 

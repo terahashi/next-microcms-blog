@@ -14,6 +14,7 @@ const NavWrap = styled.nav`
   width: 100%;
   border-bottom: 1px solid var(--border-ligner);
   z-index: 1000;
+  background-color: #130e30;
 
   .pc-menu {
     display: flex;

@@ -32,7 +32,7 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
   return (
-    <div className='flex gap-2 mt-6 items-center'>
+    <div className='flex items-center justify-center gap-[2rem] mt-[70px] md:mt-[100px] '>
       {/* 前へボタン */}
       {currentPage > 1 && (
         <Link href={`${basePath}?page=${currentPage - 1}`} className='px-3 py-1 border'>
