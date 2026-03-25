@@ -83,7 +83,6 @@ const CategoryTag = styled.span`
   cursor: pointer;
   display: inline-block;
   padding: 6px 12px;
-  margin-right: 8px;
   font-size: 0.85rem;
   color: #ffffff;
   background-color: #2f2b47;
@@ -161,7 +160,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
                 {post.category.map((cate) => (
                   //<Link>でカテゴリ一覧ページへ遷移する。
                   //"cate.id"はmicroCMS「categories API」のカテゴリIDのこと。
-                  <Link key={cate.id} href={`/category/${cate.id}`} className='mr-2'>
+                  <Link key={cate.id} href={`/category/${cate.id}`}>
                     <CategoryTag>{cate.name}</CategoryTag>
                   </Link>
                 ))}
