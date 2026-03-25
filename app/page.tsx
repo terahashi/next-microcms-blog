@@ -10,19 +10,13 @@ import styled from 'styled-components';
 import dayjs from 'dayjs';
 
 //ページネーション(コンポーネント)
-import { Wrapper, Inner } from '@/components/common/LayoutPrimitives';
+import { Wrapper, PageInner } from '@/components/common/LayoutPrimitives';
 import Pagination from '@/components/Pagination';
 import { breakpoints } from '@/styles/breakpoints';
 
 ////ISR(定期で更新)
 //一定時間毎にページを再生成できる。(次のアクセス時にページを再生成)
 export const revalidate = 60; //60秒経過でページを再生成する
-
-////styled-components
-const PageWrapper = styled(Wrapper)`
-  margin: 0 auto;
-  max-width: 960px;
-`;
 
 //親
 const Articlelist_listContainer = styled.div`
@@ -79,12 +73,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ p
   const totalPages = Math.ceil(data.totalCount / limit); //Math.ceil()は「小数点以下を切り上げ。」
 
   return (
-    <PageWrapper>
-      <Inner>
-        <div className='mt-[70px] md:mt-[70px] mb-[100px] md:mb-[100px]'>
-          <main>
+    <Wrapper>
+      <PageInner>
+        <main>
+          <div className='mt-[70px] md:mt-[70px] mb-[100px] md:mb-[100px]'>
             <div className='mb-[40px] md:mb-[40px]'>
-              <h1 className='title__ja font-bold'>Techブログ</h1>
+              <h1 className='title__ja font-bold text-left'>Techブログ</h1>
             </div>
 
             {/* ⬇︎取得した記事一覧(posts)を「mapメソッド」で表示する。(ちなみに"配列なので"mapが使用できます) */}
@@ -104,7 +98,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ p
                           {/* 日付を表示 */}
                           <p className='text-[0.85rem] text-gray-400 mb-2'>{formattedDate}</p>
                           {/* 記事タイトルを表示する */}
-                          <h2 className='text-[1.15rem] font-bold'>{post.title}</h2>
+                          <h2 className='text-[1.15rem] font-bold text-left'>{post.title}</h2>
                         </ArticleListItem_content>
                       </ArticleListItem_Container>
                     </Link>
@@ -115,9 +109,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ p
 
             {/*  ページネーション */}
             <Pagination currentPage={currentPage} totalPages={totalPages} basePath='/' />
-          </main>
-        </div>
-      </Inner>
-    </PageWrapper>
+          </div>
+        </main>
+      </PageInner>
+    </Wrapper>
   );
 }

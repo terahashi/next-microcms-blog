@@ -4,6 +4,112 @@ import Link from 'next/link';
 import dayjs from 'dayjs';
 import { getBlogPost } from '@/libs/blog'; //microCMSの「blogエンドポイント」から『"1件"の記事データを取得するAPI関数』をまとめたファイル。
 import { client } from '@/libs/microcms';
+import styled from 'styled-components';
+
+//ページネーション(コンポーネント)
+import { Wrapper, PageInner } from '@/components/common/LayoutPrimitives';
+import { breakpoints } from '@/styles/breakpoints';
+
+////ArticleHeader(絵文字、日時、タイトル)
+const ArticleHeader = styled.div`
+  margin-top: 70px;
+  margin-bottom: 50px;
+  @media screen and (min-width: ${breakpoints.tablet}) {
+    margin-top: 70px;
+    margin-bottom: 50px;
+  }
+`;
+
+////Container
+const ArticleHeader_Container = styled.div`
+  margin-bottom: 20px;
+  @media screen and (min-width: ${breakpoints.tablet}) {
+    margin-bottom: 20px;
+  }
+`;
+
+const Article_Emoji = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 37px;
+  width: 77px;
+  height: 77px;
+  background-color: #2f2b47;
+  border-radius: 14px;
+  @media screen and (min-width: ${breakpoints.tablet}) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    width: 90px;
+    height: 90px;
+  }
+`;
+
+const ArticleHeader_metaContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  font-size: 14.5px;
+  text-align: left;
+  color: var(--color-gray-400);
+`;
+
+const ArticleHeader_title = styled.h1`
+  max-width: 780px;
+  margin: 20px auto 0;
+  font-weight: bold;
+  text-align: left;
+  font-size: 1.4rem;
+`;
+
+////カテゴリ
+const Article_Category = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-width: 780px;
+  margin: 30px auto 0;
+  @media screen and (min-width: ${breakpoints.tablet}) {
+    margin: 30px auto 0;
+  }
+`;
+
+////カテゴリのタグ(角丸デザイン)
+const CategoryTag = styled.span`
+  cursor: pointer;
+  display: inline-block;
+  padding: 6px 12px;
+  margin-right: 8px;
+  font-size: 0.85rem;
+  color: #ffffff;
+  background-color: #2f2b47;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  &:hover {
+    background-color: #3b3560;
+  }
+`;
+
+////Article_Body_Container(本文)
+const Article_Body_Container = styled.div`
+  max-width: 780px;
+  margin: 0 auto 70px;
+  padding: 40px 24px;
+  background: #1e1b34;
+  border: 1px solid #3b3151;
+  border-radius: 8px;
+  font-size: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  @media screen and (min-width: ${breakpoints.tablet}) {
+    margin: 70px auto;
+    padding: 56px 40px;
+  }
+`;
 
 //// 記事詳細ページの生成
 // blog/abc123にアクセスすると「BlogPostPage()」が実行されます。
@@ -27,33 +133,50 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
   const post = await getBlogPost(id);
 
   //⬇︎dayjsを使って「publishedAt」をYY.MM.DD形式に変換
-  const formattedDate = dayjs(post.publishedAt).format('YY/MM/DD');
+  const formattedDate = dayjs(post.publishedAt).format('YYYY/MM/DD');
 
   return (
-    <main>
-      {/* 絵文字を表示 */}
-      <p>{post.emoji}</p>
+    <Wrapper>
+      <PageInner>
+        <main>
+          {/* ArticleHeader(絵文字、日時、タイトル、カテゴリーを表示) */}
+          <ArticleHeader>
+            <ArticleHeader_Container>
+              <Article_Emoji>
+                {/* 絵文字を表示 */}
+                {post.emoji}
+              </Article_Emoji>
 
-      {/* タイトルを表示 */}
-      <h1>{post.title}</h1>
+              {/* 日付を表示 */}
+              <ArticleHeader_metaContainer>{formattedDate}に投稿</ArticleHeader_metaContainer>
 
-      {/* 日付を表示 */}
-      <div>{formattedDate}</div>
+              <ArticleHeader_title className='title__ja'>
+                {/* タイトルを表示 */}
+                {post.title}
+              </ArticleHeader_title>
 
-      {/* カテゴリーを表示 */}
-      <div>
-        カテゴリー：
-        {post.category.map((cate) => (
-          //<Link>でカテゴリ一覧ページへ遷移する。
-          //"cate.id"はmicroCMS「categories API」のカテゴリIDのこと。
-          <Link key={cate.id} href={`/category/${cate.id}`} className='mr-2'>
-            {cate.name}
-          </Link>
-        ))}
-      </div>
-      {/* 記事本文を表示 */}
-      <div dangerouslySetInnerHTML={{ __html: post.body }} />
-    </main>
+              {/* カテゴリーを表示 */}
+              <Article_Category>
+                Tags:
+                {post.category.map((cate) => (
+                  //<Link>でカテゴリ一覧ページへ遷移する。
+                  //"cate.id"はmicroCMS「categories API」のカテゴリIDのこと。
+                  <Link key={cate.id} href={`/category/${cate.id}`} className='mr-2'>
+                    <CategoryTag>{cate.name}</CategoryTag>
+                  </Link>
+                ))}
+              </Article_Category>
+            </ArticleHeader_Container>
+          </ArticleHeader>
+
+          {/* Article_Body_Containe(記事本文を表示) */}
+          {/* className='article-body'は「global.cssに記載している」 */}
+          <Article_Body_Container>
+            <div className='article-body' dangerouslySetInnerHTML={{ __html: post.body }} />
+          </Article_Body_Container>
+        </main>
+      </PageInner>
+    </Wrapper>
   );
 }
 
