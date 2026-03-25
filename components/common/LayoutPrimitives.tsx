@@ -11,11 +11,18 @@ const Wrapper = styled.div`
   padding-right: clamp(16px, 4vw, 32px);
 `;
 
-//Inner
+//Inner(max-width: 1280px)
 const Inner = styled.div`
   width: 100%;
   max-width: var(--layout-max-width);
   margin: 0 auto;
 `;
 
-export { Wrapper, Inner };
+//PageWrapper(max-width: 960px)
+const PageInner = styled.div`
+  width: 100%;
+  margin: 0 auto;
+  max-width: var(--article-layout-max-width);
+`;
+
+export { Wrapper, Inner, PageInner };

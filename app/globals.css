@@ -33,6 +33,8 @@
   /* --header-height: 60.8px; */
 
   --layout-max-width: 1280px;
+  --article-layout-max-width: 960px;
+
   --layout-padding: 16px;
 
   --res-sec-padding-top: 50px;
@@ -119,6 +121,130 @@
   button {
     font-size: var(--text-button);
     line-height: 1.4;
+  }
+
+  /* ============================== */
+  /* ===== Zenn風 Article Body ===== */
+  /* ============================== */
+  .article-body {
+    line-height: 1.9;
+    font-size: 1rem;
+  }
+  /* 見出し */
+  .article-body h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 56px 0 24px;
+    padding: 12px 16px;
+    background: #2f2b47;
+    border-radius: 8px;
+  }
+
+  .article-body h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 48px 0 20px;
+    padding-left: 12px;
+    border-left: 4px solid #6c63ff;
+  }
+
+  .article-body h3 {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin: 40px 0 16px;
+  }
+
+  .article-body h4 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 32px 0 12px;
+  }
+
+  /* 段落 */
+  .article-body p {
+    margin-bottom: 1.4em;
+  }
+
+  /* リスト */
+  .article-body ul,
+  .article-body ol {
+    margin: 1.2em 0;
+    padding-left: 1.5em;
+  }
+
+  .article-body li {
+    margin-bottom: 0.4em;
+  }
+
+  /* リンク */
+  .article-body a {
+    color: #6c63ff;
+    text-decoration: underline;
+  }
+
+  .article-body a:hover {
+    opacity: 0.8;
+  }
+
+  /* 画像 */
+  .article-body img {
+    margin: 24px 0;
+    border-radius: 8px;
+    max-width: 100%;
+  }
+
+  /* コード（インライン） */
+  .article-body code {
+    background: #2f2b47;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+  }
+
+  /* コードブロック */
+  .article-body pre {
+    background: #1e1e2f;
+    padding: 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+
+  .article-body pre code {
+    background: none;
+    padding: 0;
+  }
+
+  /* 引用 */
+  .article-body blockquote {
+    border-left: 4px solid #6c63ff;
+    padding-left: 16px;
+    color: #b0b0b0;
+    margin: 24px 0;
+  }
+
+  /* 区切り線 */
+  .article-body hr {
+    border: none;
+    border-top: 1px solid #444;
+    margin: 40px 0;
+  }
+
+  /* テーブル */
+  .article-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 24px 0;
+  }
+
+  .article-body th,
+  .article-body td {
+    border: 1px solid #444;
+    padding: 8px 12px;
+  }
+
+  .article-body th {
+    background: #2f2b47;
   }
 }
 
