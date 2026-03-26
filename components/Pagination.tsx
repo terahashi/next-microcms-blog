@@ -7,7 +7,8 @@ type Props = {
   basePath: string;
 };
 
-export default function Pagination({ currentPage, totalPages, basePath }: Props) {
+// export default function Pagination({ currentPage, totalPages, basePath }: Props) {
+const Pagination = ({ currentPage, totalPages, basePath }: Props) => {
   //startは「表示するページ番号の開始位置」
   //・Math.max()は「どちらかの値が大きければ大きい値を返す。」
   //例: currentPage = 5の場合 ➡️ Math.max(1, 5-2)なので、startが3となる
@@ -96,4 +97,6 @@ export default function Pagination({ currentPage, totalPages, basePath }: Props)
       )}
     </div>
   );
-}
+};
+
+export default Pagination;

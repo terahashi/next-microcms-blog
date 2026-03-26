@@ -58,7 +58,7 @@ const ArticleHeader_metaContainer = styled.div`
   color: var(--color-gray-400);
 `;
 
-const ArticleHeader_title = styled.h1`
+const Article_title = styled.h1`
   max-width: 780px;
   margin: 20px auto 0;
   font-weight: bold;
@@ -97,16 +97,15 @@ const CategoryTag = styled.span`
 ////Article_Body_Container(本文)
 const Article_Body_Container = styled.div`
   max-width: 780px;
-  margin: 0 auto 70px;
-  padding: 40px 24px;
   background: #1e1b34;
   border: 1px solid #3b3151;
   border-radius: 8px;
-  font-size: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  margin: 0 auto 70px;
+  padding: 40px 20px;
   @media screen and (min-width: ${breakpoints.tablet}) {
-    margin: 70px auto;
-    padding: 56px 40px;
+    margin: 0 auto 70px;
+    padding: 50px 40px;
   }
 `;
 
@@ -149,10 +148,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ id: s
               {/* 日付を表示 */}
               <ArticleHeader_metaContainer>{formattedDate}に投稿</ArticleHeader_metaContainer>
 
-              <ArticleHeader_title className='title__ja'>
+              <Article_title className='title__ja'>
                 {/* タイトルを表示 */}
                 {post.title}
-              </ArticleHeader_title>
+              </Article_title>
 
               {/* カテゴリーを表示 */}
               <Article_Category>
