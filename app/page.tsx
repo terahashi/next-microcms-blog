@@ -79,6 +79,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ p
           <div className='mt-[70px] md:mt-[70px] mb-[100px] md:mb-[100px]'>
             <div className='mb-[40px] md:mb-[40px]'>
               <h1 className='title__ja font-bold text-left'>Techブログ</h1>
+              <p className='text-[0.85rem] text-gray-400'>このサイトはmicroCMS × Next.js × TypeScriptで主に作成しています。</p>
             </div>
 
             {/* ⬇︎取得した記事一覧(posts)を「mapメソッド」で表示する。(ちなみに"配列なので"mapが使用できます) */}
