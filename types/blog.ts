@@ -8,6 +8,7 @@ export type Blog = {
   id: string; //記事ID
   title: string; //記事タイトル
   body: string; //記事の本文
+  description?: string; //記事の説明
   thumbnail?: {
     url: string; //サムネイル画像URL
   };

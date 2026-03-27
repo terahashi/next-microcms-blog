@@ -144,3 +144,9 @@ export default function AboutPage() {
     </Wrapper>
   );
 }
+
+////SEO設定(このページ専用)
+export const metadata = {
+  title: 'About', //このページのタイトル
+  description: 'DevLogを運営。Next.jsやReactを中心に学習内容を発信しています。', //このページの説明
+};

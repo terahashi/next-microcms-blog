@@ -204,3 +204,42 @@ export async function generateStaticParams() {
     };
   });
 }
+
+////SEO設定(記事ごと)
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const post = await getBlogPost(params.id);
+  const description = post.description ?? '記事詳細ページ';
+
+  return {
+    //⬇︎ページタイトルなどを定義
+    title: post.title,
+    description,
+    alternates: {
+      //Canonical URLは「このコンテンツの正式なURLはこれです」と検索エンジンに伝えるための仕組み。
+      canonical: `https://next-microcms-blog-fawn.vercel.app/blog/${params.id}`,
+    },
+
+    //⬇︎全SNSの基本設定「openGraph」
+    openGraph: {
+      title: post.title,
+      description,
+      images: post.thumbnail?.url
+        ? [
+            {
+              url: post.thumbnail.url,
+              width: 1200,
+              height: 630,
+            },
+          ]
+        : [],
+    },
+
+    //X(旧Twitter)専用の追加設定
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description,
+      images: post.thumbnail?.url ? [post.thumbnail.url] : [], //サムネがあれば画像を入れる。[post.thumbnail.url] : なければundefinedにする。[]
+    },
+  };
+}
