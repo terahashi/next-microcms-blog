@@ -97,15 +97,15 @@ const CategoryTag = styled.span`
 ////Article_Body_Container(本文)
 const Article_Body_Container = styled.div`
   max-width: 780px;
-  background: #1e1b34;
+  margin: 0 auto 70px;
+  /* background: #1e1b34;
   border: 1px solid #3b3151;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  margin: 0 auto 70px;
-  padding: 40px 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); */
+  /* padding: 20px 20px; */
   @media screen and (min-width: ${breakpoints.tablet}) {
     margin: 0 auto 70px;
-    padding: 50px 40px;
+    /* padding: 40px 40px; */
   }
 `;
 
@@ -207,7 +207,8 @@ export async function generateStaticParams() {
 
 ////SEO設定(記事ごと)
 export async function generateMetadata({ params }: { params: { id: string } }) {
-  const post = await getBlogPost(params.id);
+  const { id } = await params;
+  const post = await getBlogPost(id);
   const description = post.description ?? '記事詳細ページ';
 
   return {
@@ -216,7 +217,7 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
     description,
     alternates: {
       //Canonical URLは「このコンテンツの正式なURLはこれです」と検索エンジンに伝えるための仕組み。
-      canonical: `https://next-microcms-blog-fawn.vercel.app/blog/${params.id}`,
+      canonical: `https://next-microcms-blog-fawn.vercel.app/blog/${id}`,
     },
 
     //⬇︎全SNSの基本設定「openGraph」
