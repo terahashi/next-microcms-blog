@@ -33,7 +33,7 @@ const Pagination = ({ currentPage, totalPages, basePath }: Props) => {
   const pages = Array.from({ length: end - start + 1 }, (_, i) => start + i);
 
   return (
-    <div className='flex items-center justify-center gap-[2rem] mt-[70px] md:mt-[100px] '>
+    <div className='flex items-center justify-center gap-[1rem] mt-[70px] md:mt-[100px] '>
       {/* 前へボタン */}
       {currentPage > 1 && (
         <Link href={`${basePath}?page=${currentPage - 1}`} className='px-3 py-1 border'>
@@ -43,7 +43,7 @@ const Pagination = ({ currentPage, totalPages, basePath }: Props) => {
 
       {/* ⭐️⬇︎ページ番号（最大5件表示 + ページ数の省略 ...） */}
 
-      <div>
+      <div className='flex flex-nowrap items-center justify-center'>
         {/* 最初のページ */}
         {/* startは「表示するページ番号の開始位置」 */}
         {/* ⬇︎「start > 1 の場合」➡️ 『<Link>で1を表示する。』 */}
