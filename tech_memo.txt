@@ -420,3 +420,27 @@ export async function getBlogPosts(): Promise<Blog[]> {
 完了✅③記事ページ([id]/page.tsx)
 完了✅④sitemap.ts（検索エンジンにページ一覧を渡すファイル）
 完了✅⑤robots.ts(サイトを巡回(クロール)する)
+
+
+
+
+
+------------------------------------------------
+------------------------------------------------
+🔶Jestテスト
+・テストするもの一覧
+①getBlogPost（モック）をテスト
+APIからデータが来た前提で正しく動くか、をテストする。
+②layout.tsx「トップページの表示テスト(layout.tsxが children を表示しているか？)」
+③記事ページの表示テスト
+④UIはテストしない ➡️ 今回の規模なら不要と判断。
+
+
+・手順
+①Jestインストール　➡️　yarn add -D jest jest-environment-jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom ts-node @types/jest
+②next/jest インストール　➡️　npm install -D jest @types/jest ts-jest
+③jest.config.ts 作成　
+④jest.setup.ts 作成
+⑤package.jsonに追加　➡️　"scripts":に追加する　➡️　"test": "jest",  "test:watch": "jest --watch"
+⑥動作確認(test)　npm run test
+
