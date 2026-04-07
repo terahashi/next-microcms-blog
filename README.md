@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevLog
 
-## Getting Started
+## 概要
 
-First, run the development server:
+microCMS（Headless CMS）を使用し、Next.js × TypeScriptで構築したブログサイトです。
+APIから記事データを取得し、ISR / SSGを用いたデータ取得・表示の設計から実装まで一貫して行いました。
+パフォーマンスと更新性を両立した構成を意識しています。
 
-```bash
+## URL
+
+https://next-microcms-blog-fawn.vercel.app/
+
+## 使用技術
+
+- microCMS（Headless CMS）
+- Next.js（ISR / SSG）
+- TypeScript
+- Tailwind CSS
+- Styled-components
+- Jest（テスト）
+- Git / GitHub
+- SEO設定（Next.js）
+- Vercel（デプロイ）
+
+## 主な機能
+
+- 記事一覧表示
+- 記事詳細ページ表示
+- microCMSからのデータ取得（API連携）
+- ISRによる記事更新反映
+- SEOを意識したメタデータ設定
+- レスポンシブ対応
+- テストコードによるAPI処理の検証
+
+## 工夫した点
+
+- microCMSのAPIを活用し、記事一覧・詳細ページのデータ取得処理を設計
+- ISR / SSGを用いて、パフォーマンスと更新性を両立した構成を実装
+- TypeScriptを導入し、型定義やジェネリクスを活用して型安全な開発を実現
+- コンポーネント設計を意識し、再利用性・保守性の高い構成を構築
+- Jestを用いてAPIモックを作成し、データ取得処理のテストを実施
+- SEOを意識した設計を行い、検索エンジンへの最適化に対応
+
+## セットアップ方法
+
+以下の手順でローカル環境で動作確認できます。
+
+```
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 環境変数
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+microCMSのAPIを利用するため、以下の環境変数を設定してください。
+各値はmicroCMSで発行したものを使用して「.env.localファイルなどに」記載してください。
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+MICROCMS_SERVICE_DOMAIN=your-service-domain
+MICROCMS_API_KEY=your-api-key
+```
 
-## Learn More
+## テスト実行
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+npm run test
